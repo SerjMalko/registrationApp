@@ -1,0 +1,36 @@
+create database reg_test_db;
+
+CREATE TABLE `reg_test_db`.`client_info` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+        `firstName` CHAR(128) NOT NULL,
+        `lastName` CHAR(128) NOT NULL,
+        `password` CHAR(128) NOT NULL,
+        `email` CHAR(128) NOT NULL,
+        `landlinePhoneNumber` CHAR(128),
+        `mobilePhoneNumber` CHAR(128),
+        PRIMARY KEY(`id`)
+);
+
+CREATE TABLE `reg_test_db`.`email_validation` (
+
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY(`id`)
+);
+
+ALTER TABLE `reg_test_db`.`email_validation` 
+CHANGE COLUMN `id` `id` INT(11) NOT NULL ,
+ADD COLUMN `secureSequence` VARCHAR(128) NULL AFTER `id`,
+ADD COLUMN `clientInfoId` INT(11) NULL AFTER `secureSequence`,
+ADD INDEX `clientIfo_idx` (`clientInfoId` ASC);
+ALTER TABLE `reg_test_db`.`email_validation` 
+ADD CONSTRAINT `clientIfo`
+  FOREIGN KEY (`clientInfoId`)
+  REFERENCES `reg_test_db`.`client_info` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+  ALTER TABLE `reg_test_db`.`client_info` 
+ADD COLUMN `emailValidation` BIT(1) NULL DEFAULT 0 AFTER `mobilePhoneNumber`;
+
+ALTER TABLE `reg_test_db`.`email_validation` 
+CHANGE COLUMN `id` `id` INT(11) NOT NULL AUTO_INCREMENT ;
